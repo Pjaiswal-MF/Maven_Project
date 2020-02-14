@@ -1,16 +1,21 @@
 package org.apache.http.examples.client;
 
+import com.fasterxml.jackson.core.JsonParser;
 import org.junit.Test;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
+
 import static org.junit.Assert.*;
 
 public class ClientWithResponseHandlerTest {
     public static String expected;
-    public static StringBuffer sb=new StringBuffer();
+    public static StringBuffer sb = new StringBuffer();
+    JsonParser parser = null;
+
     public static void main() throws IOException {
 
         ClientWithResponseHandlerTest main = new ClientWithResponseHandlerTest();
@@ -22,11 +27,10 @@ public class ClientWithResponseHandlerTest {
         ClassLoader classLoader = getClass().getClassLoader();
 
         URL resource = classLoader.getResource(filename);
-        if (resource == null) {
-            throw new IllegalArgumentException("file is not found!");
-        } else {
-            System.out.println("File Found");
+        if (resource != null) {
             return new File(resource.getFile());
+        } else {
+            throw new IllegalArgumentException("file is not found!");
         }
     }
 
@@ -49,13 +53,14 @@ public class ClientWithResponseHandlerTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        expected=sb.toString();
+        expected = sb.toString();
         return expected;
     }
-@Test
-    public void JunitTest( ) throws Exception{
+
+    @Test
+    public void JunitTest() throws Exception {
         ClientWithResponseHandler newClient = new ClientWithResponseHandler();
-        String result=newClient.fun1();
-        assertEquals(getExpected(),result);
+        String result = String.valueOf(newClient.ResponseHandlerFunc());
+        assertEquals(getExpected(), result);
     }
 }
